@@ -1,0 +1,2429 @@
+{
+    "openapi": "3.0.1",
+    "paths": {
+        "/atlas/api/status": {
+            "get": {
+                "operationId": "getStatus",
+                "responses": {
+                    "default": {
+                        "description": "default response",
+                        "content": {
+                            "text/plain": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/error_codes": {
+            "get": {
+                "operationId": "listErrorCodes",
+                "responses": {
+                    "default": {
+                        "description": "default response",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ErrorCodeResponse"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/forms": {
+            "get": {
+                "tags": [
+                    "v1/forms"
+                ],
+                "summary": "Returns a list of all form titles",
+                "operationId": "listFormTitles",
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/forms/{title}/versions": {
+            "get": {
+                "tags": [
+                    "v1/forms"
+                ],
+                "summary": "Provides a list of all supported versions of the provided form",
+                "operationId": "listFormVersions",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "path",
+                        "description": "the title of the form returned from /v1/forms/",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "integer"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/forms/{title}/versions/{version}": {
+            "get": {
+                "tags": [
+                    "v1/forms"
+                ],
+                "summary": "Get the JSON-Schema for a form.",
+                "operationId": "getSchema",
+                "parameters": [
+                    {
+                        "name": "title",
+                        "in": "path",
+                        "description": "The title of the form.<br> Example: new_account_form",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "version",
+                        "in": "path",
+                        "description": "The form version.<br> Example: 2",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    },
+                    {
+                        "name": "option",
+                        "in": "query",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "INCLUDE_JAVA_TYPE"
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "text/plain; charset=UTF-8": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/accounts/{accountNumber}/restrictions/{restrictionName}": {
+            "put": {
+                "tags": [
+                    "v1/accounts"
+                ],
+                "summary": "Apply a restriction to a specified account",
+                "operationId": "addAccountRestriction",
+                "parameters": [
+                    {
+                        "name": "accountNumber",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "restrictionName",
+                        "in": "path",
+                        "description": "The restriction to apply to the account.<br>Current list of available restrictions:<li>CLOSED_BY_FIRM",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "204": {
+                        "description": "No Change Made"
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AtlasResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "delete": {
+                "tags": [
+                    "v1/accounts"
+                ],
+                "summary": "Delete a restriction from the specified account",
+                "operationId": "removeAccountRestriction",
+                "parameters": [
+                    {
+                        "name": "accountNumber",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "restrictionName",
+                        "in": "path",
+                        "description": "The restriction to delete from the account.<br>Current list of available restrictions:<li>CLOSED_BY_FIRM",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "204": {
+                        "description": "No Change Made"
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AtlasResponse"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/accounts/{account}/owners": {
+            "get": {
+                "tags": [
+                    "v1/accounts"
+                ],
+                "summary": "Returns a list of owners of the specified account.",
+                "operationId": "getAccountOwners",
+                "parameters": [
+                    {
+                        "name": "account",
+                        "in": "path",
+                        "description": "The unique identifier of the desired account",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "ownerType",
+                        "in": "query",
+                        "description": "Set of OwnerTypes to restrict the query to.",
+                        "schema": {
+                            "uniqueItems": true,
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "enum": [
+                                    "AUTHORIZED_AGENT",
+                                    "AUTHORIZED_MEMBER",
+                                    "AUTHORIZED_OWNER",
+                                    "BENEFICIARY",
+                                    "CUSTODIAN",
+                                    "EDUCATION_BENEFICIARY",
+                                    "EDUCATION_MANAGER",
+                                    "EXECUTOR",
+                                    "GUARDIAN_CONSERVATOR",
+                                    "INTERNAL_POWER_OF_ATTY",
+                                    "INITIAL_DEPOSITOR",
+                                    "JOINT_OWNER",
+                                    "MINOR_OWNER",
+                                    "OTHER",
+                                    "PRIMARY_OWNER",
+                                    "POWER_OF_ATTY",
+                                    "SOLE_PROPRIETOR",
+                                    "TRADING_AUTHORITY",
+                                    "TREASURER",
+                                    "TRUSTEE",
+                                    "TRUSTED_CONTACT"
+                                ]
+                            }
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Owner"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/accounts/{account}/interested_parties": {
+            "get": {
+                "tags": [
+                    "v1/accounts"
+                ],
+                "summary": "Returns the interested parties of the specified account.",
+                "operationId": "getInterestedParties",
+                "parameters": [
+                    {
+                        "name": "account",
+                        "in": "path",
+                        "description": "The unique identifier of the desired account",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/InterestedParty"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/accounts/{account}/authorized_traders": {
+            "get": {
+                "tags": [
+                    "v1/accounts"
+                ],
+                "summary": "Returns the authorized traders of the specified account.",
+                "operationId": "getAuthorizedTraders",
+                "parameters": [
+                    {
+                        "name": "account",
+                        "in": "path",
+                        "description": "The unique identifier of the desired account",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AuthorizedTrader"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/accounts/{account}/documents": {
+            "get": {
+                "tags": [
+                    "v1/accounts"
+                ],
+                "summary": "Returns the documents associated with the specified account.",
+                "operationId": "getDocuments",
+                "parameters": [
+                    {
+                        "name": "account",
+                        "in": "path",
+                        "description": "The unique identifier of the desired account",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/Document"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/accounts/{account}/investment_profile": {
+            "get": {
+                "tags": [
+                    "v1/accounts"
+                ],
+                "summary": "Returns the investment profile of the specified account.",
+                "operationId": "getInvestmentProfile",
+                "parameters": [
+                    {
+                        "name": "account",
+                        "in": "path",
+                        "description": "The unique identifier of the desired account",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/InvestmentProfile"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/accounts/{account}/e_preferences": {
+            "get": {
+                "tags": [
+                    "v1/accounts"
+                ],
+                "summary": "Returns the EPreferences of the specified account.",
+                "operationId": "getEPreferences",
+                "parameters": [
+                    {
+                        "name": "account",
+                        "in": "path",
+                        "description": "The unique identifier of the desired account",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/EPreferences"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/accounts/{account}/scratch_pad": {
+            "get": {
+                "tags": [
+                    "v1/accounts"
+                ],
+                "summary": "Returns the scratch pads of the specified account.",
+                "operationId": "getScratchPad",
+                "parameters": [
+                    {
+                        "name": "account",
+                        "in": "path",
+                        "description": "The unique identifier of the desired account",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/ScratchPad"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/accounts/reserve": {
+            "post": {
+                "tags": [
+                    "v1/accounts"
+                ],
+                "summary": "Reserve a set of account numbers for later use in account creation.",
+                "description": "Requires the PRE_ALLOCATED_ACCOUNT_NUMBER feature be enabled at the correspondent level. Contact an account executive for details.",
+                "operationId": "reserveAccounts",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AccountReservationRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/accounts": {
+            "get": {
+                "tags": [
+                    "v1/accounts"
+                ],
+                "summary": "Attempt to match accounts from the query provided.",
+                "description": "A match will be attempted on tax ID, account number, or account name, depending on the format of the query.",
+                "operationId": "getAccounts",
+                "parameters": [
+                    {
+                        "name": "q",
+                        "in": "query",
+                        "description": "Query specifying tax ID, account number, or name on account",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/AccountSearchMatch"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v1/accounts/{account}": {
+            "get": {
+                "tags": [
+                    "v1/accounts"
+                ],
+                "summary": "Returns the account details of the specified account.",
+                "operationId": "getAccountDetails",
+                "parameters": [
+                    {
+                        "name": "account",
+                        "in": "path",
+                        "description": "The unique identifier of the desired account",
+                        "required": true,
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccountDetail"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v2/account_requests": {
+            "get": {
+                "tags": [
+                    "v2/account_requests"
+                ],
+                "summary": "Finds requests that match the specified query parameters.",
+                "operationId": "find",
+                "parameters": [
+                    {
+                        "name": "startDateTime",
+                        "in": "query",
+                        "description": "filter requests created after this datetime",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "name": "endDateTime",
+                        "in": "query",
+                        "description": "filter requests created before this date time",
+                        "schema": {
+                            "type": "string",
+                            "format": "date-time"
+                        }
+                    },
+                    {
+                        "name": "requestId",
+                        "in": "query",
+                        "description": "select a specific request id",
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    },
+                    {
+                        "name": "account",
+                        "in": "query",
+                        "description": "select a specific account",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "branch",
+                        "in": "query",
+                        "description": "filter requests to a single branch",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "correspondent",
+                        "in": "query",
+                        "description": "filter requests to a single correspondent",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "status",
+                        "in": "query",
+                        "description": "filter requests to a single status, one of:\n<ul>\n<li>NEW a newly submitted request that hasn't started processing</li>\n<li>PENDING a request that is sending CIP checks </li>\n<li>INVESTIGATION_SUBMITTED a request that is awaiting CIP responses </li>\n<li>ACTION_REQUIRED a request that needs manual intervention </li>\n<li>SUSPENDED a request that has failing CIP checks </li>\n<li>READY_FOR_BACK_OFFICE a request that has passed CIP and is headed to back office </li>\n<li>BACK_OFFICE a request that is processing in back office </li>\n<li>ACCOUNT_SETUP a request that has complete back office and is almost completed </li>\n<li>CANCELED a request that has been canceled through the API </li>\n<li>REJECTED a request that was either an ERROR or SUSPENDED for more than 30 days </li>\n<li>COMPLETE a completed request </li>\n<li>ERROR a request that had an unrecoverable runtime error, will move to REJECTED</li>\n",
+                        "schema": {
+                            "type": "string",
+                            "enum": [
+                                "NEW",
+                                "PENDING",
+                                "INVESTIGATION_SUBMITTED",
+                                "ACTION_REQUIRED",
+                                "SUSPENDED",
+                                "READY_FOR_BACK_OFFICE",
+                                "BACK_OFFICE",
+                                "READY_FOR_FUTURES",
+                                "FUTURES_BACK_OFFICE",
+                                "ACCOUNT_SETUP",
+                                "CANCELED",
+                                "REJECTED",
+                                "COMPLETE",
+                                "ERROR"
+                            ]
+                        }
+                    },
+                    {
+                        "name": "externalRequestId",
+                        "in": "query",
+                        "description": "select a request with a given external account ID",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "description": "the maximum number of requests to return in the query",
+                        "schema": {
+                            "type": "integer",
+                            "format": "int32"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "array",
+                                    "items": {
+                                        "$ref": "#/components/schemas/PublicAccountResponseV2"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "tags": [
+                    "v2/account_requests"
+                ],
+                "summary": "Creates a new Atlas request",
+                "operationId": "create",
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AccountRequest"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicAccountResponseV2"
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "patch": {
+                "tags": [
+                    "v2/account_requests"
+                ],
+                "summary": "Formless account updates.",
+                "operationId": "updateAccount",
+                "requestBody": {
+                    "content": {
+                        "*/*": {
+                            "schema": {
+                                "$ref": "#/components/schemas/AccountUpdateRequestDto"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/AccountUpdateResponseDto"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v2/account_requests/{id}/cancel": {
+            "post": {
+                "tags": [
+                    "v2/account_requests"
+                ],
+                "summary": "Cancels an Atlas request.",
+                "operationId": "cancel",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "$ref": "#/components/schemas/CancelAccountRequestParams"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicAccountResponseV2"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/atlas/api/v2/account_requests/{id}": {
+            "get": {
+                "tags": [
+                    "v2/account_requests"
+                ],
+                "summary": "Retrieves an Atlas request by ID",
+                "operationId": "get",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "the UUID of the Atlas request",
+                        "required": true,
+                        "schema": {
+                            "type": "string",
+                            "format": "uuid"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "This is a bad request. Please make sure that all the required data is provided and the format of the request is accurate."
+                    },
+                    "401": {
+                        "description": "Make sure you have a valid JWT token. If you got it at some point but are getting this error, make sure it has not expired."
+                    },
+                    "403": {
+                        "description": "The provided credentials are insufficient to see this resource."
+                    },
+                    "404": {
+                        "description": "The requested resource was not found"
+                    },
+                    "500": {
+                        "description": "We messed up. Please let us know so we can fix it ASAP."
+                    },
+                    "200": {
+                        "description": "Success",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "$ref": "#/components/schemas/PublicAccountResponseV2"
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "ErrorCodeResponse": {
+                "type": "object",
+                "properties": {
+                    "code": {
+                        "type": "string"
+                    },
+                    "description": {
+                        "type": "string"
+                    },
+                    "createdDate": {
+                        "type": "string"
+                    },
+                    "detailKeys": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "AtlasResponse": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    }
+                }
+            },
+            "Address": {
+                "type": "object",
+                "properties": {
+                    "streetAddress": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "city": {
+                        "type": "string"
+                    },
+                    "state": {
+                        "type": "string"
+                    },
+                    "postalCode": {
+                        "type": "string"
+                    },
+                    "country": {
+                        "type": "string"
+                    }
+                }
+            },
+            "EmploymentInfo": {
+                "type": "object",
+                "properties": {
+                    "employer": {
+                        "type": "string"
+                    },
+                    "yearsEmployed": {
+                        "type": "number",
+                        "format": "double"
+                    },
+                    "positionEmployed": {
+                        "type": "string"
+                    },
+                    "businessAddress": {
+                        "$ref": "#/components/schemas/Address"
+                    }
+                }
+            },
+            "Owner": {
+                "type": "object",
+                "properties": {
+                    "givenName": {
+                        "type": "string"
+                    },
+                    "familyName": {
+                        "type": "string"
+                    },
+                    "entityName": {
+                        "type": "string"
+                    },
+                    "ownerType": {
+                        "type": "string",
+                        "enum": [
+                            "AUTHORIZED_AGENT",
+                            "AUTHORIZED_MEMBER",
+                            "AUTHORIZED_OWNER",
+                            "BENEFICIARY",
+                            "CUSTODIAN",
+                            "EDUCATION_BENEFICIARY",
+                            "EDUCATION_MANAGER",
+                            "EXECUTOR",
+                            "GUARDIAN_CONSERVATOR",
+                            "INTERNAL_POWER_OF_ATTY",
+                            "INITIAL_DEPOSITOR",
+                            "JOINT_OWNER",
+                            "MINOR_OWNER",
+                            "OTHER",
+                            "PRIMARY_OWNER",
+                            "POWER_OF_ATTY",
+                            "SOLE_PROPRIETOR",
+                            "TRADING_AUTHORITY",
+                            "TREASURER",
+                            "TRUSTEE",
+                            "TRUSTED_CONTACT"
+                        ]
+                    },
+                    "dateOfBirth": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "citizenshipCountry": {
+                        "type": "string"
+                    },
+                    "homeAddress": {
+                        "$ref": "#/components/schemas/Address"
+                    },
+                    "mailingAddress": {
+                        "$ref": "#/components/schemas/Address"
+                    },
+                    "phoneNumbers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PhoneNumber"
+                        }
+                    },
+                    "emailAddresses": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "maritalStatus": {
+                        "type": "string",
+                        "enum": [
+                            "SINGLE",
+                            "MARRIED",
+                            "DIVORCED",
+                            "WIDOWED"
+                        ]
+                    },
+                    "numDependents": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "employment": {
+                        "$ref": "#/components/schemas/EmploymentInfo"
+                    },
+                    "isDeceased": {
+                        "type": "boolean"
+                    },
+                    "taxId": {
+                        "type": "string"
+                    },
+                    "taxIdType": {
+                        "type": "string",
+                        "enum": [
+                            "NOT_USED",
+                            "SOCIAL_SECURITY_NUMBER",
+                            "TAX_ID_NUMBER",
+                            "SOCIAL_INSURANCE",
+                            "INDIVIDUAL_TAX_ID_NUMBER",
+                            "QUALIFIED_INTERMEDIARY",
+                            "ADOPTEE_TAX_ID",
+                            "MOCK_SSN",
+                            "USER_DEFINED"
+                        ]
+                    },
+                    "fullTaxIdToken": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PhoneNumber": {
+                "type": "object",
+                "properties": {
+                    "phoneNumber": {
+                        "type": "string"
+                    },
+                    "phoneNumberType": {
+                        "type": "string",
+                        "enum": [
+                            "HOME",
+                            "BUSINESS",
+                            "CELLULAR",
+                            "FAX",
+                            "TELEX",
+                            "OTHER"
+                        ]
+                    },
+                    "extension": {
+                        "type": "string"
+                    }
+                }
+            },
+            "InterestedParty": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "$ref": "#/components/schemas/InterestedPartyName"
+                    },
+                    "additionalName": {
+                        "type": "string"
+                    },
+                    "mailingAddress": {
+                        "$ref": "#/components/schemas/Address"
+                    }
+                }
+            },
+            "InterestedPartyName": {
+                "type": "object",
+                "properties": {
+                    "givenName": {
+                        "type": "string"
+                    },
+                    "middleInitial": {
+                        "type": "string"
+                    },
+                    "familyName": {
+                        "type": "string"
+                    },
+                    "companyName": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AuthorizedTrader": {
+                "type": "object",
+                "properties": {
+                    "name": {
+                        "type": "string"
+                    },
+                    "tradingAuthorityCode": {
+                        "type": "string",
+                        "enum": [
+                            "FULL",
+                            "LIMITED"
+                        ]
+                    },
+                    "discretionaryAuthorizationExpDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "hasDiscretionaryAuthority": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "Document": {
+                "type": "object",
+                "properties": {
+                    "documentCode": {
+                        "type": "string",
+                        "enum": [
+                            "AFDC",
+                            "ALAW",
+                            "AORG",
+                            "BIRC",
+                            "BLAW",
+                            "BPOA",
+                            "CACR",
+                            "CAEN",
+                            "CAFR",
+                            "CAGR",
+                            "CAPP",
+                            "CARE",
+                            "CASW",
+                            "CINC",
+                            "CODI",
+                            "COMP",
+                            "CORP",
+                            "CORT",
+                            "COVL",
+                            "CRPL",
+                            "CRSP",
+                            "DEAC",
+                            "DEBA",
+                            "DIVD",
+                            "DOCT",
+                            "DORF",
+                            "FFIA",
+                            "GNDR",
+                            "GUAC",
+                            "INAD",
+                            "INVC",
+                            "JOIN",
+                            "JTWR",
+                            "LEGO",
+                            "LEOA",
+                            "LOSS",
+                            "LPWA",
+                            "MARC",
+                            "MKEO",
+                            "MLOA",
+                            "MMAG",
+                            "MRGN",
+                            "NAST",
+                            "NEWA",
+                            "NEWF",
+                            "NYNR",
+                            "OMAG",
+                            "OPCQ",
+                            "OPRQ",
+                            "OPTA",
+                            "OPTW",
+                            "PARA",
+                            "PARF",
+                            "PATG",
+                            "PERL",
+                            "PWAD",
+                            "QPNA",
+                            "RGOV",
+                            "RISK",
+                            "SCOD",
+                            "SEPP",
+                            "SOLP",
+                            "SSFA",
+                            "SWAC",
+                            "TAXW",
+                            "TBEN",
+                            "TEIC",
+                            "TFRD",
+                            "TFRF",
+                            "TFRJ",
+                            "TRAG",
+                            "TRAL",
+                            "TRAM",
+                            "TRAU",
+                            "U101",
+                            "U150",
+                            "U151",
+                            "U2BN",
+                            "U529",
+                            "UACH",
+                            "UACO",
+                            "UACT",
+                            "UACU",
+                            "UADB",
+                            "UAMA",
+                            "UAPU",
+                            "UATT",
+                            "UAVN",
+                            "UBCA",
+                            "UBEN",
+                            "UBKD",
+                            "UBUS",
+                            "UCAA",
+                            "UCBP",
+                            "UCIP",
+                            "UCRY",
+                            "UCMA",
+                            "UCMR",
+                            "UCOM",
+                            "UCOR",
+                            "UCSO",
+                            "UDBA",
+                            "UDIV",
+                            "UDSG",
+                            "UDVP",
+                            "UDWK",
+                            "UEDC",
+                            "UEMP",
+                            "UESA",
+                            "UESC",
+                            "UESG",
+                            "UESM",
+                            "UESO",
+                            "UFBD",
+                            "UFDD",
+                            "UFFD",
+                            "UFOX",
+                            "UFRS",
+                            "UFUT",
+                            "UGSA",
+                            "UGVC",
+                            "UHLD",
+                            "UIDS",
+                            "UILM",
+                            "UINT",
+                            "UINV",
+                            "UIPA",
+                            "UIPO",
+                            "UIPP",
+                            "UIRF",
+                            "UIRS",
+                            "UIRX",
+                            "UIRY",
+                            "UJBO",
+                            "UJIM",
+                            "ULAP",
+                            "ULLC",
+                            "ULNE",
+                            "UMAI",
+                            "UMIS",
+                            "UMRG",
+                            "UMSA",
+                            "UMSC",
+                            "UNCR",
+                            "UNEW",
+                            "UNMB",
+                            "UOBJ",
+                            "UOPE",
+                            "UPAT",
+                            "UPBA",
+                            "UPBM",
+                            "UPEN",
+                            "UPIC",
+                            "UPID",
+                            "UPMA",
+                            "UPMT",
+                            "UPOB",
+                            "UPSD",
+                            "UPVC",
+                            "UQPA",
+                            "UQPL",
+                            "URES",
+                            "UREV",
+                            "UROL",
+                            "URRA",
+                            "URTP",
+                            "USAP",
+                            "USCA",
+                            "USEP",
+                            "USER",
+                            "USFA",
+                            "USIG",
+                            "USIM",
+                            "USTR",
+                            "USTU",
+                            "USWP",
+                            "UTCF",
+                            "UTFR",
+                            "UTIN",
+                            "UTOD",
+                            "UTON",
+                            "UTRW",
+                            "UTST",
+                            "UTWO",
+                            "UTX1",
+                            "UW_7",
+                            "UW8E",
+                            "UW8U",
+                            "UW9U",
+                            "UW9Z",
+                            "UWSV",
+                            "VOIC",
+                            "WILL",
+                            "UMSL",
+                            "UNKNOWN"
+                        ]
+                    },
+                    "documentName": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "MISSING",
+                            "BYPASSED",
+                            "SENT_ON",
+                            "SENT_BACK",
+                            "RECEIVED",
+                            "STORED",
+                            "DELETED",
+                            "UNKNOWN"
+                        ]
+                    },
+                    "statusUpdatedDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "isRequired": {
+                        "type": "boolean"
+                    },
+                    "isMissing": {
+                        "type": "boolean"
+                    },
+                    "receivedDate": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "InvestmentProfile": {
+                "type": "object",
+                "properties": {
+                    "investmentObjective": {
+                        "type": "string",
+                        "enum": [
+                            "LONG_TERM_GROWTH_WITH_SAFETY",
+                            "SHORT_TERM_GROWTH_WITH_RISK",
+                            "SPECULATION",
+                            "INCOME",
+                            "GROWTH_INCOME",
+                            "GROWTH_AND_INCOME",
+                            "LONG_TERM_GROWTH_WITH_GREATER_RISK",
+                            "BALANCED",
+                            "CAPITAL_APPRECIATION",
+                            "GROWTH",
+                            "CAPITAL_PRESERVATION",
+                            "MAXIMUM_GROWTH",
+                            "OTHER"
+                        ]
+                    },
+                    "investmentExperience": {
+                        "type": "string",
+                        "enum": [
+                            "NONE",
+                            "LIMITED",
+                            "GOOD",
+                            "EXTENSIVE"
+                        ]
+                    },
+                    "annualIncomeUSD": {
+                        "$ref": "#/components/schemas/InvestmentRange"
+                    },
+                    "liquidNetWorthUSD": {
+                        "$ref": "#/components/schemas/InvestmentRange"
+                    },
+                    "totalNetWorthUSD": {
+                        "$ref": "#/components/schemas/InvestmentRange"
+                    },
+                    "riskTolerance": {
+                        "type": "string"
+                    },
+                    "federalTaxBracketPercent": {
+                        "type": "number",
+                        "format": "double"
+                    }
+                }
+            },
+            "InvestmentRange": {
+                "type": "object",
+                "properties": {
+                    "min": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "max": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "EPreferences": {
+                "type": "object",
+                "properties": {
+                    "eStatementIndicator": {
+                        "type": "string",
+                        "enum": [
+                            "PRINT_AND_ELECTRONIC",
+                            "ELECTRONIC_ONLY",
+                            "FAILED_EMAIL_DELIVERY",
+                            "NOT_VIEWED_WITHIN_TIMEFRAME",
+                            "NOT_USED"
+                        ]
+                    },
+                    "eConfirmIndicator": {
+                        "type": "string",
+                        "enum": [
+                            "PRINT_AND_ELECTRONIC",
+                            "ELECTRONIC_ONLY",
+                            "FAILED_EMAIL_DELIVERY",
+                            "NOT_VIEWED_WITHIN_TIMEFRAME",
+                            "NOT_USED"
+                        ]
+                    },
+                    "eProspectusIndicator": {
+                        "type": "string",
+                        "enum": [
+                            "PRINT_AND_ELECTRONIC",
+                            "ELECTRONIC_ONLY",
+                            "FAILED_EMAIL_DELIVERY",
+                            "NOT_VIEWED_WITHIN_TIMEFRAME",
+                            "NOT_USED"
+                        ]
+                    },
+                    "eProxyIndicator": {
+                        "type": "string",
+                        "enum": [
+                            "PRINT_AND_ELECTRONIC",
+                            "ELECTRONIC_ONLY",
+                            "FAILED_EMAIL_DELIVERY",
+                            "NOT_VIEWED_WITHIN_TIMEFRAME",
+                            "NOT_USED"
+                        ]
+                    },
+                    "eTaxStatementIndicator": {
+                        "type": "string",
+                        "enum": [
+                            "PRINT_AND_ELECTRONIC",
+                            "ELECTRONIC_ONLY",
+                            "FAILED_EMAIL_DELIVERY",
+                            "NOT_VIEWED_WITHIN_TIMEFRAME",
+                            "NOT_USED"
+                        ]
+                    }
+                }
+            },
+            "ScratchPad": {
+                "type": "object",
+                "properties": {
+                    "line": {
+                        "type": "string"
+                    },
+                    "createDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "lastUpdated": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "AccountReservationRequest": {
+                "type": "object",
+                "properties": {
+                    "branch": {
+                        "type": "string"
+                    },
+                    "count": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "AccountSearchMatch": {
+                "type": "object",
+                "properties": {
+                    "accountNumber": {
+                        "type": "string"
+                    },
+                    "accountTitle": {
+                        "type": "string"
+                    },
+                    "accountNames": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "accountAddress": {
+                        "$ref": "#/components/schemas/Address"
+                    },
+                    "accountType": {
+                        "type": "string",
+                        "enum": [
+                            "MARGIN",
+                            "CASH",
+                            "DVP",
+                            "SHORT",
+                            "UNKNOWN"
+                        ]
+                    },
+                    "last4TIN": {
+                        "type": "string"
+                    },
+                    "officeCode": {
+                        "type": "string"
+                    },
+                    "repCode": {
+                        "type": "string"
+                    },
+                    "phoneNumbers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PhoneNumber"
+                        }
+                    }
+                }
+            },
+            "AccountDetail": {
+                "type": "object",
+                "properties": {
+                    "accountTitle": {
+                        "type": "string"
+                    },
+                    "accountNames": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "accountAddress": {
+                        "$ref": "#/components/schemas/Address"
+                    },
+                    "hasTrustedContact": {
+                        "type": "boolean"
+                    },
+                    "phoneNumbers": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/PhoneNumber"
+                        }
+                    },
+                    "emailAddress": {
+                        "type": "string"
+                    },
+                    "jointOwnerName": {
+                        "type": "string"
+                    },
+                    "partyType": {
+                        "type": "string",
+                        "enum": [
+                            "ENTITY",
+                            "PERSON",
+                            "UNKNOWN"
+                        ]
+                    },
+                    "accountType": {
+                        "type": "string",
+                        "enum": [
+                            "MARGIN",
+                            "CASH",
+                            "DVP",
+                            "SHORT",
+                            "UNKNOWN"
+                        ]
+                    },
+                    "marginType": {
+                        "type": "string",
+                        "enum": [
+                            "PM_MASTER",
+                            "PM_SUB",
+                            "JBO_MASTER",
+                            "JBO_SUB",
+                            "REG_T"
+                        ]
+                    },
+                    "accountRegistration": {
+                        "type": "string",
+                        "enum": [
+                            "BUSINESS_TRUST",
+                            "COMMUNITY_PROPERTY",
+                            "CUSTODIAN",
+                            "CORPORATION",
+                            "EXECUTOR_ADMINISTRATOR",
+                            "GUARDIAN_COMMITTEEMAN_CONSERVATOR",
+                            "INDIVIDUAL",
+                            "INVESTMENT_CLUB",
+                            "JTWROS",
+                            "JTTENCOM",
+                            "PARTNERSHIP",
+                            "OTHER_IRA",
+                            "APEX_IRA",
+                            "IRA_SPOUSE",
+                            "APEX_ROLLOVER_IRA",
+                            "SEP_EMPLOYER_IRA",
+                            "APEX_SEP_IRA",
+                            "APEX_ROTH_IRA",
+                            "PLAN_TERMINATED_IRA",
+                            "IRA_PARTICIPANT_MATURED",
+                            "APEX_COVERDELL_EDUCATION_IRA",
+                            "SBJCT_TO_DISABILITY_PYMT_IRA",
+                            "SBJCT_TO_DEATH_IRA",
+                            "EMPLOYEE_IRA",
+                            "EMPLOYEE_SPOUSE_IRA",
+                            "INDIVIDUAL_401K",
+                            "APEX_MONEY_PRCHSE_PENSION_PL",
+                            "APEX_SIMPLE_IRA",
+                            "APEX_PROFIT_SHARING_PLAN",
+                            "TERMINATED_401K",
+                            "PREMATURE_EXCEPTION_IRA",
+                            "SIMPLE_401K",
+                            "APEX_BENEFICIARY_IRA",
+                            "DESIGNATED_ROTH_401K",
+                            "ROTH_CONVERSION_IRA",
+                            "SOLE_PROPRIETORSHIP",
+                            "TRUSTEE_TESTAMENTARY",
+                            "TRUSTEE_LIVING_TRUST",
+                            "UN_INCORP_ASSOC",
+                            "JTTEN_ENT",
+                            "DVP_INST_EXEC_BROKER",
+                            "APEX_BROKER",
+                            "OMNIBUS_DOMESTIC",
+                            "JBO_ACCOUNT",
+                            "RETIREMENT_PLAN",
+                            "LIMITED_LIABILITY",
+                            "TOD_INDIVIDUAL",
+                            "TOD_JTWROS",
+                            "FOREIGN_ESTATE",
+                            "FOREIGN_JOINT",
+                            "FOREIGN_CORPORATION",
+                            "FOREIGN_GUARDIAN",
+                            "FOREIGN_INDIVIDUAL",
+                            "FOREIGN_INVESTMENT_CLUB",
+                            "FOREIGN_BANK_CORP",
+                            "FOREIGN_FINANCIAL_INST_CORP",
+                            "FOREIGN_JTTENCOM",
+                            "FOREIGN_PARTNERSHIP",
+                            "FOREIGN_JTWROS",
+                            "FOREIGN_TRUST",
+                            "FOREIGN_BUSINESS_TRUST",
+                            "FOREIGN_NON_CORP",
+                            "FOREIGN_JTTEN_ENT",
+                            "FOREIGN_BANK_LLC",
+                            "FOREIGN_BANK_PARTNERSHIP",
+                            "FOREIGN_FINANCIAL_INST_LLC",
+                            "FOREIGN_FINANCIAL_INST_PARTNERSHIP",
+                            "FOREIGN_DVP",
+                            "FOREIGN_APEX_BROKER",
+                            "FOREIGN_OMNIBUS",
+                            "FOREIGN_LIMITED_LIABILITY",
+                            "DOMESTIC_MASTER_SUB",
+                            "UNKNOWN"
+                        ]
+                    },
+                    "pabType": {
+                        "type": "string",
+                        "enum": [
+                            "AVERAGE_PRICE",
+                            "DAY_TRADING",
+                            "EXECUTION_ONLY",
+                            "MARKET_MAKER",
+                            "RISKLESS_PRINCIPAL",
+                            "SYNDICATE",
+                            "TRADING",
+                            "TEST",
+                            "WORTHLESS_SECURITIES",
+                            "PNL_SWEEP",
+                            "WRITE_OFF",
+                            "COMMISSION",
+                            "RIA_FEE",
+                            "FEE",
+                            "ERROR",
+                            "GOOD_FAITH_DEPOSIT",
+                            "OTHER"
+                        ]
+                    },
+                    "isActive": {
+                        "type": "boolean"
+                    },
+                    "isMaster": {
+                        "type": "boolean"
+                    },
+                    "masterAccount": {
+                        "type": "string"
+                    },
+                    "taxId": {
+                        "type": "string"
+                    },
+                    "taxStatus": {
+                        "type": "string",
+                        "enum": [
+                            "NONE"
+                        ]
+                    },
+                    "withholdingStatus": {
+                        "type": "string",
+                        "enum": [
+                            "IRA_NO_WH_NO_1099_EXCEPT_SUB_PMNT",
+                            "DVP_NO_WH_NO_1099_EXCEPT_SUB_PMNT",
+                            "W9_ON_FILE_CERTIFIED",
+                            "W8_ON_FILE_CERTIFIED",
+                            "NO_W8_SUBJ_TO_BK_WH",
+                            "NO_W9_BK_WH_ALL",
+                            "NO_W9_30_DAY_GRACE_PERIOD",
+                            "NO_W9_BK_WH_DIV_INT",
+                            "VOLUNTARY_DISCLOSURE_SUBJ_BK_WH",
+                            "C_NOTICE_BK_WH_DIV_INT",
+                            "PRESUMED_FOREIGN_NO_TREATY_BENEFITS",
+                            "UNCERT_S_CORP",
+                            "CERT_S_CORP",
+                            "FIRST_SECOND_B_NOTICE"
+                        ]
+                    },
+                    "withholdingDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "isPatternDayTrader": {
+                        "type": "boolean"
+                    },
+                    "isCustodial": {
+                        "type": "boolean"
+                    },
+                    "mailingListIndicator": {
+                        "type": "string",
+                        "enum": [
+                            "WEEKLY",
+                            "MONTHLY",
+                            "QUARTERLY",
+                            "YEARLY",
+                            "RETURNED_THIRD_TIME",
+                            "RETURNED_SECOND_TIME",
+                            "RETURNED_FIRST_TIME",
+                            "DECEASED"
+                        ]
+                    },
+                    "returnedMailCount": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "optionLevel": {
+                        "type": "integer",
+                        "format": "int32"
+                    },
+                    "openedDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "restrictionCode": {
+                        "type": "string",
+                        "enum": [
+                            "LEGAL_RESTRICTION",
+                            "ACAT_INSTX_RECD",
+                            "REGT_DAYTRADING_VIOLATION",
+                            "DAYTRADING_VIOLATORS",
+                            "ELECTRONIC_DELIVERY_RESTRICTION",
+                            "FROZEN_FOR_90_DAYS",
+                            "DEPOSIT_ACCT",
+                            "NO_ASSETS_OUT",
+                            "INTERNAL_CONVERSION_IN_PROGRESS",
+                            "NO_FUNDS_OUT",
+                            "DO_NOT_DECONVERT",
+                            "NO_PAPERWORK_ON_FILE",
+                            "ACCT_RESTRICTED_MARGIN",
+                            "SOCIAL_SECURITY_MISMATCH",
+                            "CONVERSION_IN_PROGRESS",
+                            "DECONVERSION_IN_PROGRESS",
+                            "EXCESSIVE_RETURN_DEPOSITS",
+                            "LIQUIDATING_ORDERS_ONLY",
+                            "NO_PAPERWORK_ON_FILE_HARD_RESTRICTION",
+                            "RETURNED_MAIL",
+                            "CLOSED_BY_FIRM",
+                            "UNKNOWN"
+                        ]
+                    },
+                    "repCode": {
+                        "type": "string"
+                    },
+                    "spcDocCode": {
+                        "type": "string"
+                    },
+                    "classificationCode": {
+                        "type": "string"
+                    },
+                    "dtcNumber": {
+                        "type": "string"
+                    },
+                    "agentId": {
+                        "type": "string"
+                    },
+                    "institutionalId": {
+                        "type": "string"
+                    },
+                    "lastStatementDate": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "checkWritingIndicator": {
+                        "type": "boolean"
+                    },
+                    "debitCardIndicator": {
+                        "type": "boolean"
+                    },
+                    "hasAchInfo": {
+                        "type": "boolean"
+                    },
+                    "hasFdicInfo": {
+                        "type": "boolean"
+                    },
+                    "firstName": {
+                        "type": "string"
+                    },
+                    "middleInitial": {
+                        "type": "string"
+                    },
+                    "lastName": {
+                        "type": "string"
+                    },
+                    "dateOfBirth": {
+                        "type": "string",
+                        "format": "date"
+                    },
+                    "fullTaxIdToken": {
+                        "type": "string"
+                    },
+                    "lastUpdatedScratchPad": {
+                        "type": "string",
+                        "format": "date"
+                    }
+                }
+            },
+            "AccountUpdateResponseDto": {
+                "type": "object",
+                "properties": {
+                    "requestId": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "account": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "NEW",
+                            "PENDING",
+                            "INVESTIGATION_SUBMITTED",
+                            "ACTION_REQUIRED",
+                            "SUSPENDED",
+                            "READY_FOR_BACK_OFFICE",
+                            "BACK_OFFICE",
+                            "READY_FOR_FUTURES",
+                            "FUTURES_BACK_OFFICE",
+                            "ACCOUNT_SETUP",
+                            "CANCELED",
+                            "REJECTED",
+                            "COMPLETE",
+                            "ERROR"
+                        ]
+                    },
+                    "repCode": {
+                        "type": "string"
+                    },
+                    "externalRequestId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AccountUpdateRequestDto": {
+                "type": "object",
+                "properties": {
+                    "account": {
+                        "type": "string"
+                    },
+                    "branch": {
+                        "type": "string"
+                    },
+                    "repCode": {
+                        "type": "string"
+                    },
+                    "externalRequestId": {
+                        "type": "string"
+                    }
+                }
+            },
+            "PublicAccountResponseV2": {
+                "type": "object",
+                "properties": {
+                    "id": {
+                        "type": "string",
+                        "format": "uuid"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int64"
+                    },
+                    "account": {
+                        "type": "string"
+                    },
+                    "status": {
+                        "type": "string",
+                        "enum": [
+                            "NEW",
+                            "PENDING",
+                            "INVESTIGATION_SUBMITTED",
+                            "ACTION_REQUIRED",
+                            "SUSPENDED",
+                            "READY_FOR_BACK_OFFICE",
+                            "BACK_OFFICE",
+                            "READY_FOR_FUTURES",
+                            "FUTURES_BACK_OFFICE",
+                            "ACCOUNT_SETUP",
+                            "CANCELED",
+                            "REJECTED",
+                            "COMPLETE",
+                            "ERROR"
+                        ]
+                    },
+                    "externalRequestId": {
+                        "type": "string"
+                    },
+                    "sketchIds": {
+                        "type": "array",
+                        "items": {
+                            "type": "string"
+                        }
+                    },
+                    "reason": {
+                        "type": "object"
+                    }
+                }
+            },
+            "CancelAccountRequestParams": {
+                "type": "object",
+                "properties": {
+                    "comment": {
+                        "type": "string"
+                    }
+                }
+            },
+            "AccountRequest": {
+                "type": "object",
+                "properties": {
+                    "modifyType": {
+                        "type": "string",
+                        "enum": [
+                            "CREATE",
+                            "UPDATE"
+                        ]
+                    },
+                    "user": {
+                        "$ref": "#/components/schemas/User"
+                    },
+                    "account": {
+                        "type": "string"
+                    },
+                    "branch": {
+                        "type": "string"
+                    },
+                    "repCode": {
+                        "type": "string"
+                    },
+                    "externalRequestId": {
+                        "type": "string"
+                    },
+                    "forms": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/FormData"
+                        }
+                    }
+                }
+            },
+            "FormData": {
+                "type": "object",
+                "properties": {
+                    "formId": {
+                        "$ref": "#/components/schemas/FormId"
+                    },
+                    "jsonData": {
+                        "$ref": "#/components/schemas/JsonNode"
+                    },
+                    "iseSigned": {
+                        "type": "boolean"
+                    },
+                    "formSchemaHash": {
+                        "$ref": "#/components/schemas/FormSchemaHash"
+                    }
+                }
+            },
+            "FormId": {
+                "type": "object",
+                "properties": {
+                    "title": {
+                        "type": "string"
+                    },
+                    "version": {
+                        "type": "integer",
+                        "format": "int32"
+                    }
+                }
+            },
+            "FormSchemaHash": {
+                "type": "object",
+                "properties": {
+                    "algorithm": {
+                        "type": "string"
+                    },
+                    "hash": {
+                        "type": "string"
+                    }
+                }
+            },
+            "JsonNode": {
+                "type": "object",
+                "properties": {
+                    "containerNode": {
+                        "type": "boolean"
+                    },
+                    "missingNode": {
+                        "type": "boolean"
+                    },
+                    "object": {
+                        "type": "boolean"
+                    },
+                    "pojo": {
+                        "type": "boolean"
+                    },
+                    "integralNumber": {
+                        "type": "boolean"
+                    },
+                    "floatingPointNumber": {
+                        "type": "boolean"
+                    },
+                    "short": {
+                        "type": "boolean"
+                    },
+                    "int": {
+                        "type": "boolean"
+                    },
+                    "textual": {
+                        "type": "boolean"
+                    },
+                    "boolean": {
+                        "type": "boolean"
+                    },
+                    "binary": {
+                        "type": "boolean"
+                    },
+                    "valueNode": {
+                        "type": "boolean"
+                    },
+                    "float": {
+                        "type": "boolean"
+                    },
+                    "nodeType": {
+                        "type": "string",
+                        "enum": [
+                            "ARRAY",
+                            "BINARY",
+                            "BOOLEAN",
+                            "MISSING",
+                            "NULL",
+                            "NUMBER",
+                            "OBJECT",
+                            "POJO",
+                            "STRING"
+                        ]
+                    },
+                    "array": {
+                        "type": "boolean"
+                    },
+                    "null": {
+                        "type": "boolean"
+                    },
+                    "number": {
+                        "type": "boolean"
+                    },
+                    "bigDecimal": {
+                        "type": "boolean"
+                    },
+                    "bigInteger": {
+                        "type": "boolean"
+                    },
+                    "double": {
+                        "type": "boolean"
+                    },
+                    "long": {
+                        "type": "boolean"
+                    }
+                }
+            },
+            "User": {
+                "type": "object",
+                "properties": {
+                    "subject": {
+                        "type": "string"
+                    },
+                    "userEntity": {
+                        "type": "string"
+                    },
+                    "userClass": {
+                        "type": "string"
+                    }
+                }
+            }
+        }
+    }
+}
+
